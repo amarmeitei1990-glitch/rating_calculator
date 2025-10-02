@@ -28,7 +28,7 @@
 
     .card{
       width:100%;
-      max-width:900px;
+      max-width:1000px;
       border-radius:var(--radius);
       padding:40px;
       background: var(--card-grad);
@@ -116,23 +116,16 @@
     <h1>Rating Calculator</h1>
     <form id="calcForm" autocomplete="off" onsubmit="return false;">
       <div class="grid">
-        <label>
-          <span class="label-title">1st week</span>
-          <input id="w1" type="text" inputmode="decimal" aria-label="1st week rating" />
-        </label>
-        <label>
-          <span class="label-title">2nd week</span>
-          <input id="w2" type="text" inputmode="decimal" aria-label="2nd week rating" />
-        </label>
-        <label>
-          <span class="label-title">3rd week</span>
-          <input id="w3" type="text" inputmode="decimal" aria-label="3rd week rating" />
-        </label>
-        <label>
-          <span class="label-title">4th week</span>
-          <input id="w4" type="text" inputmode="decimal" aria-label="4th week rating" />
-        </label>
+        <label><span class="label-title">1st week</span><input id="w1" type="text" inputmode="decimal"></label>
+        <label><span class="label-title">2nd week</span><input id="w2" type="text" inputmode="decimal"></label>
+        <label><span class="label-title">3rd week</span><input id="w3" type="text" inputmode="decimal"></label>
+        <label><span class="label-title">4th week</span><input id="w4" type="text" inputmode="decimal"></label>
+        <label><span class="label-title">5th week</span><input id="w5" type="text" inputmode="decimal"></label>
+        <label><span class="label-title">6th week</span><input id="w6" type="text" inputmode="decimal"></label>
+        <label><span class="label-title">7th week</span><input id="w7" type="text" inputmode="decimal"></label>
+        <label><span class="label-title">8th week</span><input id="w8" type="text" inputmode="decimal"></label>
       </div>
+
       <div class="result">
         <div class="value" id="avgValue">— / 5</div>
         <div class="meta" id="countMeta">0 weeks included • —%</div>
@@ -145,10 +138,8 @@
 
   <script>
     (function(){
-      const w1=document.getElementById('w1');
-      const w2=document.getElementById('w2');
-      const w3=document.getElementById('w3');
-      const w4=document.getElementById('w4');
+      const inputs = [];
+      for(let i=1;i<=8;i++){ inputs.push(document.getElementById('w'+i)); }
       const avgValue=document.getElementById('avgValue');
       const countMeta=document.getElementById('countMeta');
       const clearBtn=document.getElementById('clearBtn');
@@ -163,7 +154,7 @@
       function formatNum(n){ return (Math.round(n*100)/100).toFixed(2); }
 
       function compute(){
-        const vals=[parseVal(w1.value),parseVal(w2.value),parseVal(w3.value),parseVal(w4.value)];
+        const vals=inputs.map(inp=>parseVal(inp.value));
         const present=vals.filter(x=>x!==null);
         if(present.length===0){
           avgValue.textContent='— / 5';
@@ -177,14 +168,14 @@
         countMeta.textContent=`${present.length} week${present.length>1?'s':''} included • ${pct.toFixed(1)}%`;
       }
 
-      [w1,w2,w3,w4].forEach(inp=>{
+      inputs.forEach(inp=>{
         inp.addEventListener('input',compute);
       });
 
       clearBtn.addEventListener('click',()=>{
-        w1.value=''; w2.value=''; w3.value=''; w4.value='';
+        inputs.forEach(inp=>inp.value='');
         compute();
-        w1.focus();
+        inputs[0].focus();
       });
 
       compute();
